@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}{{ user.name }}'s Orders{% endblock %}
+{% block content %}
+    <h2>Список заказов пользователя: {{ user.name }} за {{ days }} дней</h2>
+    <ul>
+        {% for k, v in my_dict.items %}
+        <li>{{ k.ordered_at }}</li>
+        <li>{{ v }}</li>
+
+        {% endfor %}
+    </ul>
+{% endblock %}

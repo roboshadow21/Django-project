@@ -44,7 +44,7 @@ def get_orders(request, user_id):
     my_dict = {}
     for i in range(len(orders)):
         my_dict[orders[i]] = orders[i].products.all()
-    return render(request, 'myapp3/orders.html', {'user': user, 'my_dict': my_dict})
+    return render(request, 'myapp/orders.html', {'user': user, 'my_dict': my_dict})
 
 
 def get_sorted_orders(request, user_id, days):
@@ -57,7 +57,7 @@ def get_sorted_orders(request, user_id, days):
         date = orders[i].ordered_at
         if date_past < date.replace(tzinfo=None) < date_now:
             my_dict[orders[i]] = orders[i].products.all()
-    return render(request, 'myapp3/orders_sorted.html', {'user': user, 'my_dict': my_dict, 'days': days})
+    return render(request, 'myapp/orders_sorted.html', {'user': user, 'my_dict': my_dict, 'days': days})
 
 def upload_image(request):
 
@@ -70,7 +70,7 @@ def upload_image(request):
 
     else:
         form = ImageForm()
-    return render(request, 'myapp4/upload_image.html', {'form': form})
+    return render(request, 'myapp/upload_image.html', {'form': form})
 
 
 def edit_product(request):
@@ -90,5 +90,5 @@ def edit_product(request):
     else:
         form = EditProductForm()
         message = 'Заполните форму'
-    return render(request, 'myapp4/edit_product.html', {'form': form, 'message': message})
+    return render(request, 'myapp/edit_product.html', {'form': form, 'message': message})
 

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}Редактирование товара{% endblock %}
+
+{% block content %}
+{{ message }}
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+  <input type="submit" value="Отправить">
+  <a href="{% url 'upload_image' %}">Загрузить изображение товара</a>
+</form>
+{% endblock %}

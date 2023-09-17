@@ -1,12 +1,9 @@
 import logging
-from django.http import HttpResponse
 import datetime
-
+from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render, get_object_or_404
-from django.templatetags.tz import utc
-from django.views import View
-from django.http import HttpResponse, JsonResponse
-from django.views.generic import TemplateView
+from django.http import HttpResponse
+from .forms import EditProductForm, ImageForm
 from .models import User, Product, Order
 
 logger = logging.getLogger(__name__)
@@ -47,7 +44,7 @@ def get_orders(request, user_id):
     my_dict = {}
     for i in range(len(orders)):
         my_dict[orders[i]] = orders[i].products.all()
-    return render(request, 'myapp3/orders.html', {'user': user, 'my_dict': my_dict})
+    return render(request, 'myapp/orders.html', {'user': user, 'my_dict': my_dict})
 
 
 def get_sorted_orders(request, user_id, days):
@@ -60,4 +57,38 @@ def get_sorted_orders(request, user_id, days):
         date = orders[i].ordered_at
         if date_past < date.replace(tzinfo=None) < date_now:
             my_dict[orders[i]] = orders[i].products.all()
-    return render(request, 'myapp3/orders_sorted.html', {'user': user, 'my_dict': my_dict, 'days': days})
+    return render(request, 'myapp/orders_sorted.html', {'user': user, 'my_dict': my_dict, 'days': days})
+
+def upload_image(request):
+
+    if request.method == 'POST':
+        form = ImageForm(request.POST, request.FILES)
+        if form.is_valid():
+            image = form.cleaned_data['image']
+            fs = FileSystemStorage()
+            fs.save(image.name, image)
+
+    else:
+        form = ImageForm()
+    return render(request, 'myapp/upload_image.html', {'form': form})
+
+
+def edit_product(request):
+    if request.method == 'POST':
+        form = EditProductForm(request.POST)
+        message = 'Ошибка в данных'
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            prod_id = form.cleaned_data['prod_id']
+            price = form.cleaned_data['price']
+            logger.info(f'Getting {name=}, {prod_id=}, {price=}.')
+            product = Product.objects.filter(pk=prod_id).first()
+            product.name = name
+            product.price = price
+            product.save()
+            message = f'Товар {name}, цена: {price}'
+    else:
+        form = EditProductForm()
+        message = 'Заполните форму'
+    return render(request, 'myapp/edit_product.html', {'form': form, 'message': message})
+

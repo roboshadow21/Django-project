@@ -12,6 +12,12 @@ class User(models.Model):
         return f'Username: {self.name}, email: {self.email}, phone: {self.phone}'
 
 
+class Category(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return self.name
+
 class Product(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()

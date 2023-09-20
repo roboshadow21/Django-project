@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import Category, Product, Order, User
 
+
 @admin.action(description="Сбросить количество в ноль")
 def reset_quantity(modeladmin, request, queryset):
     queryset.update(quantity=0)
@@ -46,6 +47,7 @@ class ProductAdmin(admin.ModelAdmin):
         ),
     ]
 
+
 class OrderAdmin(admin.ModelAdmin):
     """Список заказов."""
     list_display = ['customer', 'total_price', 'ordered_at']
@@ -54,27 +56,28 @@ class OrderAdmin(admin.ModelAdmin):
     """Отдельный заказ."""
     readonly_fields = ['ordered_at', 'customer']
     fieldsets = [
-            (
-                None,
-                {
-                    'classes': ['wide'],
-                    'fields': ['customer'],
-                },
-            ),
-            (
-                'Заказ',
-                {
-                    'classes': ['collapse'],
-                    'description': 'Состав заказа', 'fields': ['products'],
-                },
-            ),
-            (
-                'Стоимость и дата',
-                {
-                    'fields': ['total_price', 'ordered_at'],
-                }
-            ),
-        ]
+        (
+            None,
+            {
+                'classes': ['wide'],
+                'fields': ['customer'],
+            },
+        ),
+        (
+            'Заказ',
+            {
+                'classes': ['collapse'],
+                'description': 'Состав заказа', 'fields': ['products'],
+            },
+        ),
+        (
+            'Стоимость и дата',
+            {
+                'fields': ['total_price', 'ordered_at'],
+            }
+        ),
+    ]
+
 
 class UserAdmin(admin.ModelAdmin):
     """Список заказов."""

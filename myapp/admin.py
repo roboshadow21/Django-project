@@ -32,5 +32,37 @@ class OrderAdmin(admin.ModelAdmin):
             ),
         ]
 
+class UserAdmin(admin.ModelAdmin):
+    """Список заказов."""
+    list_display = ['name', 'registered_at']
+    ordering = ['registered_at']
+    list_filter = ['registered_at', 'name']
+    """Отдельный заказ."""
+    readonly_fields = ['registered_at']
+    fieldsets = [
+        (
+            None,
+            {
+                'classes': ['wide'],
+                'fields': ['name'],
+            },
+        ),
+        (
+            'Контактные данные',
+            {
+                'classes': ['collapse'],
+                'description': 'Телефон и почта', 'fields': ['phone', 'address', 'email'],
+            },
+        ),
+        (
+            'Дата регистрации',
+            {
+                'fields': ['registered_at'],
+            }
+        ),
+    ]
+
+
 admin.site.register(Category)
 admin.site.register(Order, OrderAdmin)
+admin.site.register(User, UserAdmin)
